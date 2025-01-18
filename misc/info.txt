@@ -1,0 +1,26 @@
+con str:
+
+"DefaultConnection": "Server=localhost,1445;Database=MyMvcAppDb;User Id=sa;Password=!Dragosbotez123;TrustServerCertificate=True"
+
+se modifica in appsett si appset.developmnebt
+
+
+//comanda BAZA DE DATE( MODIFICA calea de pe sistem cu calea ta (D:path))
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=!Dragosbotez123" -p 1445:1433 --name songratings -v D:/path:/var/opt/mssql/data -d mcr.microsoft.com/mssql/server:2022-latest
+
+
+Cerinte:
+
+-> adauga proiect
+-> adauga single
+
+-> vezi ratinguri per user in manager
+
+-> front pageul care sa afiseze toate albumele/singleurile, sa aiba un filtru
+de cautare, si sa NU PERMITA apasarea butonului de rate (buton care se afla in fiecare
+'sectiune/chenar' al albumului/singleului afisat).
+
+-> adaugare ratinguri
+
+-> mecanism de linkuire artwork-> single/album in wwwroot
+
