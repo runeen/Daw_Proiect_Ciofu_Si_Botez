@@ -1,21 +1,41 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using cbapp.Models;
+using Microsoft.EntityFrameworkCore;
+using cbapp.Data;
 
 namespace cbapp.Controllers;
 
 public class HomeController : Controller
 {
+    private readonly ApplicationDbContext _context;
     private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ApplicationDbContext context)
     {
-        _logger = logger;
+        _context = context;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> IndexAsync()
     {
-        return View();
+        var projects = await _context.projects.ToListAsync();
+        return View(projects);
+    }
+
+    [HttpGet()]
+    public async Task<IActionResult> Search(string searchTerm)
+    {
+        if (string.IsNullOrEmpty(searchTerm))
+        {
+            return View(new List<Project>());
+        }
+
+        var projects = await _context.projects
+            .Where(p => EF.Functions.Like(p.release_title, $"%{searchTerm}%"))
+            .ToListAsync();
+
+        ViewData["Debug"] = searchTerm;
+        return View(projects);
     }
 
     public IActionResult Privacy()

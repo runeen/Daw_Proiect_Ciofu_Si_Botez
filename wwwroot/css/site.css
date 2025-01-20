@@ -50,3 +50,33 @@ body {
   top: 50%;
   color: darkred;
 }
+
+.grid-proiecte {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-column-gap: 10px;
+    grid-row-gap: 7px;
+}
+
+.proiect-div {
+    background-color: lightblue;
+    padding: 20px;
+}
+
+.titlu-proiect-grid {
+    color: black;
+}
+
+.details-proiect-grid {
+    color: black;
+}
+
+a {
+    text-decoration: none;  
+}
+
+form {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 50%;
+}
