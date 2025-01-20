@@ -1,8 +1,34 @@
-﻿@{
+﻿@model IEnumerable<cbapp.Models.Project>
+@{
     ViewData["Title"] = "Home Page";
 }
 
+
+
 <div class="text-center">
     <h1 class="h1_personalizat" style="margin-top: 22px;">Ultimele albume si singles care au primit note</h1>
-    
+
 </div>
+
+<form action="Home/Search">
+    <input type="text" name="searchTerm"/>
+    <input type="submit"/>
+</form>
+
+<div class= "grid-proiecte">
+        @foreach (var item in Model)
+        {
+            <div class="proiect-div">
+			<a asp-action="Edit" asp-controller="Projects" asp-route-id="@item.project_id">
+                <h1 class="titlu-proiect-grid">
+				@Html.DisplayFor(modelItem => item.type): @Html.DisplayFor(modelItem => item.release_title)
+                </h1>
+                <p class= "details-proiect-grid">
+				@Html.DisplayFor(modelItem => item.artist) - @Convert.ToDateTime(item.release_date).ToString("dd/MM/yyyy")
+                </p>
+            </a>
+            </div>
+        }
+</div>
+
+
