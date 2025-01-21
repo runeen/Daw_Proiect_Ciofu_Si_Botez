@@ -34,6 +34,7 @@ namespace cbapp.Controllers
                 return NotFound();
             }
 
+            var debug = await _context.Songs.FromSql($"Select * from dbo.Songs Where project_id = {id}").ToListAsync();
 
 
             var project = await _context.projects
@@ -42,6 +43,8 @@ namespace cbapp.Controllers
             {
                 return NotFound();
             }
+
+            project.Songs = debug;
 
             return View(project);
         }
@@ -81,6 +84,9 @@ namespace cbapp.Controllers
             {
                 return NotFound();
             }
+
+            project.Songs = await _context.Songs.FromSql($"Select * from dbo.Songs Where project_id = {id}").ToListAsync();
+
             return View(project);
         }
 

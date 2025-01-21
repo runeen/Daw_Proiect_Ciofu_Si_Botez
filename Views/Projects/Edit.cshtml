@@ -40,6 +40,47 @@
     </div>
 </div>
 
+<div class="Traklist-div">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    title
+                </th>
+                <th>
+                    length
+                </th>
+                <th>
+                    tracklist_number
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Songs)
+            {
+                <tr>
+                    <td>
+                        @item.title
+                    </td>
+                    <td>
+                        @item.length
+                    </td>
+                    <td>
+                        @item.tracklist_number
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-controller="Songs" asp-route-id="@item.song_id">Edit</a> |
+                        <a asp-action="Details" asp-controller="Songs" asp-route-id="@item.song_id">Details</a> |
+                        <a asp-action="Delete" asp-controller="Songs" asp-route-id="@item.song_id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
