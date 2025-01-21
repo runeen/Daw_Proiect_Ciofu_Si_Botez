@@ -10,23 +10,23 @@ using cbapp.Models;
 
 namespace cbapp.Controllers
 {
-    public class ProjectsController : Controller
+    public class SongsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ProjectsController(ApplicationDbContext context)
+        public SongsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Projects
+        // GET: Songs
         public async Task<IActionResult> Index()
         {
-            var projects = await _context.projects.ToListAsync();
-            return View(projects);
+            var applicationDbContext = _context.Songs.Include(s => s.Project);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Projects/Details/5
+        // GET: Songs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,41 +34,49 @@ namespace cbapp.Controllers
                 return NotFound();
             }
 
-
-
-            var project = await _context.projects
-                .FirstOrDefaultAsync(m => m.project_id == id);
-            if (project == null)
+            var songs = await _context.Songs
+                .Include(s => s.Project)
+                .FirstOrDefaultAsync(m => m.song_id == id);
+            if (songs == null)
             {
                 return NotFound();
             }
 
-            return View(project);
+            return View(songs);
         }
 
-        // GET: Projects/Create
+        // GET: Songs/Create
         public IActionResult Create()
         {
+            ViewData["project_id"] = new SelectList(_context.projects, "project_id", "artist");
             return View();
         }
 
-        // POST: Projects/Create
+
+        //TODO: ADAUGA VALIDARE
+        // POST: Songs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("project_id,artist,release_title,release_date,type")] Project project)
+        public async Task<IActionResult> Create([Bind("song_id,title,length,project_id,tracklist_number")] Songs songs)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(project);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "", new { area = "" });
-            }
-            return View(project);
+
+            //if (!TryValidateModel(songs))
+            //{
+            //    ViewData["Debug"] =  $"{songs.song_id}, {songs.title}, {songs.length}, {songs.project_id}, {songs.tracklist_number}";
+            //}
+
+            _context.Add(songs);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
+            // -- asta te trimite inapoi in create daca e ceva gresit da dau bypass
+            //ViewData["project_id"] = new SelectList(_context.projects, "project_id", "artist", songs.project_id);
+            //return View(songs);
         }
 
-        // GET: Projects/Edit/5
+        // GET: Songs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,22 +84,23 @@ namespace cbapp.Controllers
                 return NotFound();
             }
 
-            var project = await _context.projects.FindAsync(id);
-            if (project == null)
+            var songs = await _context.Songs.FindAsync(id);
+            if (songs == null)
             {
                 return NotFound();
             }
-            return View(project);
+            ViewData["project_id"] = new SelectList(_context.projects, "project_id", "artist", songs.project_id);
+            return View(songs);
         }
 
-        // POST: Projects/Edit/5
+        // POST: Songs/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("project_id,artist,release_title,release_date,type")] Project project)
+        public async Task<IActionResult> Edit(int id, [Bind("song_id,title,length,project_id,tracklist_number")] Songs songs)
         {
-            if (id != project.project_id)
+            if (id != songs.song_id)
             {
                 return NotFound();
             }
@@ -100,12 +109,12 @@ namespace cbapp.Controllers
             {
                 try
                 {
-                    _context.Update(project);
+                    _context.Update(songs);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProjectExists(project.project_id))
+                    if (!SongsExists(songs.song_id))
                     {
                         return NotFound();
                     }
@@ -116,10 +125,11 @@ namespace cbapp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(project);
+            ViewData["project_id"] = new SelectList(_context.projects, "project_id", "artist", songs.project_id);
+            return View(songs);
         }
 
-        // GET: Projects/Delete/5
+        // GET: Songs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -127,34 +137,35 @@ namespace cbapp.Controllers
                 return NotFound();
             }
 
-            var project = await _context.projects
-                .FirstOrDefaultAsync(m => m.project_id == id);
-            if (project == null)
+            var songs = await _context.Songs
+                .Include(s => s.Project)
+                .FirstOrDefaultAsync(m => m.song_id == id);
+            if (songs == null)
             {
                 return NotFound();
             }
 
-            return View(project);
+            return View(songs);
         }
 
-        // POST: Projects/Delete/5
+        // POST: Songs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var project = await _context.projects.FindAsync(id);
-            if (project != null)
+            var songs = await _context.Songs.FindAsync(id);
+            if (songs != null)
             {
-                _context.projects.Remove(project);
+                _context.Songs.Remove(songs);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProjectExists(int id)
+        private bool SongsExists(int id)
         {
-            return _context.projects.Any(e => e.project_id == id);
+            return _context.Songs.Any(e => e.song_id == id);
         }
     }
 }
