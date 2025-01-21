@@ -2,10 +2,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace cbapp.Models
 {
-    public class SongRatings   
+    public class ProjectRatings   
     {
         
-         public int SongId { get; set; } 
+         public int projectId { get; set; } 
         public string UserId { get; set; }
         [Required]
         
@@ -16,7 +16,7 @@ namespace cbapp.Models
         [Range(1, 10, ErrorMessage = "Valoarea ratingului este maxim 10!.")]
         public decimal score {get;set; }
 
-        public Songs Song { get; set; } 
+        public Project Project { get; set; } 
         public CustomUsers User { get; set; }
 
       

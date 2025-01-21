@@ -4,11 +4,11 @@ namespace cbapp.Models
 {
     public class CustomUsers : IdentityUser
     {
-        public ICollection<SongRatings> SongRatings { get; set; }
+        public ICollection<ProjectRatings> ProjectRatings { get; set; }
 
         public CustomUsers()
         {
-            SongRatings = new HashSet<SongRatings>();
+            ProjectRatings = new HashSet<ProjectRatings>();
         }
     }
 }

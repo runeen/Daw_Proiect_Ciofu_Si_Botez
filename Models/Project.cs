@@ -19,13 +19,17 @@ namespace cbapp.Models
 
         
          public ICollection<Songs> Songs { get; set; }
+         public ICollection<ProjectRatings> ProjectRatings { get; set; }
 
         [Required]
         public string type{ get; set; }="Single";
         
         public Project(){
             Songs=new HashSet<Songs>();
+            ProjectRatings = new HashSet<ProjectRatings>();
+
         }
+
 
 
 
