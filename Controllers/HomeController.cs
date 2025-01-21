@@ -25,6 +25,7 @@ public class HomeController : Controller
     [HttpGet()]
     public async Task<IActionResult> Search(string searchTerm)
     {
+        //comentariu
         if (string.IsNullOrEmpty(searchTerm))
         {
             return View(new List<Project>());
