@@ -1,4 +1,5 @@
-﻿@model cbapp.Models.Songs
+
+@model cbapp.Models.Songs
 
 @{
     ViewData["Title"] = "Details";
@@ -24,10 +25,9 @@
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Project)
-        </dt>
-        <dd class = "col-sm-10">    
+      </dt>
+        <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Project.artist)
-            </a>
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.tracklist_number)
@@ -37,11 +37,6 @@
         </dd>
     </dl>
 </div>
-
-
-
-
-
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.song_id">Edit</a> |
     <a asp-action="Index">Back to List</a>

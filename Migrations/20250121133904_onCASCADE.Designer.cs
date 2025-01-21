@@ -12,8 +12,8 @@ using cbapp.Data;
 namespace cbapp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250118195434_migPrincipal")]
-    partial class migPrincipal
+    [Migration("20250121133904_onCASCADE")]
+    partial class onCASCADE
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -265,9 +265,9 @@ namespace cbapp.Migrations
                     b.ToTable("projects");
                 });
 
-            modelBuilder.Entity("cbapp.Models.SongRatings", b =>
+            modelBuilder.Entity("cbapp.Models.ProjectRatings", b =>
                 {
-                    b.Property<int>("SongId")
+                    b.Property<int>("projectId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId")
@@ -279,11 +279,11 @@ namespace cbapp.Migrations
                     b.Property<decimal>("score")
                         .HasColumnType("decimal(4, 1)");
 
-                    b.HasKey("SongId", "UserId");
+                    b.HasKey("projectId", "UserId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("songRatings");
+                    b.ToTable("ProjectRatings");
                 });
 
             modelBuilder.Entity("cbapp.Models.Songs", b =>
@@ -295,10 +295,9 @@ namespace cbapp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("song_id"));
 
                     b.Property<string>("length")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("project_id")
+                    b.Property<int?>("project_id")
                         .HasColumnType("int");
 
                     b.Property<string>("title")
@@ -312,9 +311,6 @@ namespace cbapp.Migrations
                     b.HasKey("song_id");
 
                     b.HasIndex("project_id");
-
-                    b.HasIndex("title")
-                        .IsUnique();
 
                     b.ToTable("Songs");
                 });
@@ -377,21 +373,21 @@ namespace cbapp.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("cbapp.Models.SongRatings", b =>
+            modelBuilder.Entity("cbapp.Models.ProjectRatings", b =>
                 {
-                    b.HasOne("cbapp.Models.Songs", "Song")
-                        .WithMany("ratings")
-                        .HasForeignKey("SongId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("cbapp.Models.CustomUsers", "User")
-                        .WithMany("SongRatings")
+                        .WithMany("ProjectRatings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Song");
+                    b.HasOne("cbapp.Models.Project", "Project")
+                        .WithMany("ratings")
+                        .HasForeignKey("projectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
 
                     b.Navigation("User");
                 });
@@ -401,8 +397,7 @@ namespace cbapp.Migrations
                     b.HasOne("cbapp.Models.Project", "Project")
                         .WithMany("Songs")
                         .HasForeignKey("project_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Project");
                 });
@@ -410,16 +405,13 @@ namespace cbapp.Migrations
             modelBuilder.Entity("cbapp.Models.Project", b =>
                 {
                     b.Navigation("Songs");
-                });
 
-            modelBuilder.Entity("cbapp.Models.Songs", b =>
-                {
                     b.Navigation("ratings");
                 });
 
             modelBuilder.Entity("cbapp.Models.CustomUsers", b =>
                 {
-                    b.Navigation("SongRatings");
+                    b.Navigation("ProjectRatings");
                 });
 #pragma warning restore 612, 618
         }

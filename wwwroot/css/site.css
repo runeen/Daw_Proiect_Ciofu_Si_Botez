@@ -25,6 +25,12 @@ body {
   margin-bottom: 60px;
 }
 
+label {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: darkred;
+}
+
 .form-floating > .form-control-plaintext::placeholder,
 .form-floating > .form-control::placeholder {
   color: var(--bs-secondary-color);
@@ -52,37 +58,30 @@ body {
 }
 
 .grid-proiecte {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: 10px;
-    grid-row-gap: 7px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 10px;
+  grid-row-gap: 7px;
 }
 
 .proiect-div {
-    background-color: lightblue;
-    padding: 20px;
+  background-color: lightblue;
+  padding: 20px;
 }
 
 .titlu-proiect-grid {
-    color: black;
+  color: black;
 }
 
 .details-proiect-grid {
-    color: black;
+  color: black;
 }
 
 a {
-    text-decoration: none;  
+  text-decoration: none;
 }
 
 form {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    width: 50%;
-}
-
-label {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: darkred;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

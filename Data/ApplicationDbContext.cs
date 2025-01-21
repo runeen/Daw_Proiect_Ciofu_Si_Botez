@@ -1,4 +1,4 @@
-﻿using cbapp.Models;
+using cbapp.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 namespace cbapp.Data;
@@ -8,7 +8,7 @@ public class ApplicationDbContext : IdentityDbContext
     public DbSet<Songs> Songs { get; set; }
     public DbSet<Project> projects { get; set; }
 
-    public DbSet<ProjectRatings> ProjectRatings { get; set; }
+    public DbSet<ProjectRatings> ProjectRatings {get;set;}
     public DbSet<CustomUsers> CustomUsers { get; set; }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using cbapp.Data;
 using cbapp.Models;
+using System.Text.Json;
 
 namespace cbapp.Controllers
 {
@@ -58,18 +59,52 @@ namespace cbapp.Controllers
         // POST: Projects/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
+
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("project_id,artist,release_title,release_date,type")] Project project)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(project);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "", new { area = "" });
-            }
-            return View(project);
-        }
+         public async Task<IActionResult> Create([Bind("artist,release_title,release_date,type")] Project project)
+{
+    if (ModelState.IsValid)
+    {
+        Console.WriteLine("Model is valid.");
+        _context.Add(project);
+        await _context.SaveChangesAsync();
+        HttpContext.Session.SetString("p_id",project.project_id.ToString());
+        int minSongs = project.type switch
+    {
+        "Single" => 1,
+        "EP" => 2,
+        "Album" => 8,
+        _ => 0
+    };
+    HttpContext.Session.SetString("min",minSongs.ToString());
+         return RedirectToAction("Create", "Songs",new { type = project.type });
+    }
+    return View(project);
+}
+
+        //metoda cancelProject
+        public async Task<IActionResult> CancelProject(int projectId)
+{
+   
+    var project = await _context.projects
+        .Include(p => p.Songs) // Include melodiile asociate
+        .FirstOrDefaultAsync(p => p.project_id == projectId);
+
+    if (project != null)
+    {
+        _context.Songs.RemoveRange(project.Songs);
+        _context.projects.Remove(project);
+
+        // Salveaza
+        await _context.SaveChangesAsync();
+    }
+
+    return RedirectToAction("Index","HomeController");
+}
 
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -125,6 +160,20 @@ namespace cbapp.Controllers
             return View(project);
         }
 
+        [HttpPost]
+public async Task<IActionResult> DeleteOnExit([FromBody] DeleteRequest request)
+{
+    
+    var project = await _context.projects
+        .FirstOrDefaultAsync(p => p.project_id == request.ProjectId);
+
+
+    _context.projects.Remove(project);
+    await _context.SaveChangesAsync();
+
+    return Ok();
+}
+
         // GET: Projects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -139,8 +188,9 @@ namespace cbapp.Controllers
             {
                 return NotFound();
             }
-
-            return View(project);
+            _context.projects.Remove(project);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Create","Projects");
         }
 
         // POST: Projects/Delete/5

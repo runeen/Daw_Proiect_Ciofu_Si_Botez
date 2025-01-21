@@ -10,9 +10,9 @@ namespace cbapp.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int song_id { get; set; }
+        public int song_id { get; set; 
 
-        [Required]
+        
         [MaxLength(65)]
         public string title { get; set; }
 
@@ -27,11 +27,6 @@ namespace cbapp.Models
 
 
         public int tracklist_number { get; set; }
-
-
-
-
-
 
 
     }

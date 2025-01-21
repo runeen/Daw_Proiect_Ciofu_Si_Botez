@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using cbapp.Data;
 
@@ -11,9 +12,11 @@ using cbapp.Data;
 namespace cbapp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250121124140_AllowNullForProjectId")]
+    partial class AllowNullForProjectId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -379,7 +382,7 @@ namespace cbapp.Migrations
                         .IsRequired();
 
                     b.HasOne("cbapp.Models.Project", "Project")
-                        .WithMany("ProjectRatings")
+                        .WithMany("ratings")
                         .HasForeignKey("projectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -393,17 +396,16 @@ namespace cbapp.Migrations
                 {
                     b.HasOne("cbapp.Models.Project", "Project")
                         .WithMany("Songs")
-                        .HasForeignKey("project_id")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("project_id");
 
                     b.Navigation("Project");
                 });
 
             modelBuilder.Entity("cbapp.Models.Project", b =>
                 {
-                    b.Navigation("ProjectRatings");
-
                     b.Navigation("Songs");
+
+                    b.Navigation("ratings");
                 });
 
             modelBuilder.Entity("cbapp.Models.CustomUsers", b =>
