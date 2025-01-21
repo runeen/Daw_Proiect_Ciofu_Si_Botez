@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace cbapp.Migrations
 {
     /// <inheritdoc />
-    public partial class migPrincipal : Migration
+    public partial class O : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -174,6 +174,32 @@ namespace cbapp.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProjectRatings",
+                columns: table => new
+                {
+                    projectId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    rating_date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    score = table.Column<decimal>(type: "decimal(4,1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProjectRatings", x => new { x.projectId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_ProjectRatings_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProjectRatings_projects_projectId",
+                        column: x => x.projectId,
+                        principalTable: "projects",
+                        principalColumn: "project_id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Songs",
                 columns: table => new
                 {
@@ -192,32 +218,6 @@ namespace cbapp.Migrations
                         column: x => x.project_id,
                         principalTable: "projects",
                         principalColumn: "project_id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "songRatings",
-                columns: table => new
-                {
-                    SongId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    rating_date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    score = table.Column<decimal>(type: "decimal(4,1)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_songRatings", x => new { x.SongId, x.UserId });
-                    table.ForeignKey(
-                        name: "FK_songRatings_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_songRatings_Songs_SongId",
-                        column: x => x.SongId,
-                        principalTable: "Songs",
-                        principalColumn: "song_id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -261,20 +261,14 @@ namespace cbapp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_songRatings_UserId",
-                table: "songRatings",
+                name: "IX_ProjectRatings_UserId",
+                table: "ProjectRatings",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Songs_project_id",
                 table: "Songs",
                 column: "project_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Songs_title",
-                table: "Songs",
-                column: "title",
-                unique: true);
         }
 
         /// <inheritdoc />
@@ -296,16 +290,16 @@ namespace cbapp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "songRatings");
+                name: "ProjectRatings");
+
+            migrationBuilder.DropTable(
+                name: "Songs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Songs");
 
             migrationBuilder.DropTable(
                 name: "projects");

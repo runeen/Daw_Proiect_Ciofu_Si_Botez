@@ -1,13 +1,19 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 namespace cbapp.Models
 {
-    public class SongRatings   
+    public class ProjectRatings   
     {
         
-         public int SongId { get; set; } 
-        public string UserId { get; set; }
-        [Required]
+        [ForeignKey("Project")]
+    public int projectId { get; set; }
+    public Project Project { get; set; }
+
+    
+    [ForeignKey("User")]
+    public string UserId { get; set; }
+    public CustomUsers User { get; set; }
         
         public DateTime rating_date{get;set;}=DateTime.UtcNow;
 
@@ -16,8 +22,7 @@ namespace cbapp.Models
         [Range(1, 10, ErrorMessage = "Valoarea ratingului este maxim 10!.")]
         public decimal score {get;set; }
 
-        public Songs Song { get; set; } 
-        public CustomUsers User { get; set; }
+        
 
       
 

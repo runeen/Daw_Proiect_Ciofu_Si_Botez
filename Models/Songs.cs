@@ -6,6 +6,7 @@ namespace cbapp.Models
     public class Songs
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int song_id{get;set;}
 
         [Required]
@@ -24,10 +25,8 @@ namespace cbapp.Models
 
         public int tracklist_number{get;set;}
         
-        public ICollection<SongRatings> ratings{get;set;}
-      public Songs(){
-        ratings=new HashSet<SongRatings>();
-      }
+        
+      
 
      
 

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using cbapp.Data;
 using cbapp.Models;
+using System.Text.Json;
 
 namespace cbapp.Controllers
 {
@@ -55,16 +56,45 @@ namespace cbapp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("project_id,artist,release_title,release_date,type")] Project project)
+         public async Task<IActionResult> Create([Bind("artist,release_title,release_date,type")] Project project)
+{
+    if (ModelState.IsValid)
+    {
+        Console.WriteLine("Model is valid.");
+        _context.Add(project);
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Index", "Home");
+    }
+    else
+    {
+        Console.WriteLine("Model is invalid.");
+        foreach (var error in ModelState)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(project);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Index", "", new { area = "" });
-            }
-            return View(project);
+            Console.WriteLine($"Key: {error.Key}, Errors: {string.Join(", ", error.Value.Errors.Select(e => e.ErrorMessage))}");
         }
+    }
+    return RedirectToAction("Create", "Songs");
+}
+
+        //metoda cancelProject
+        public async Task<IActionResult> CancelProject(int projectId)
+{
+   
+    var project = await _context.projects
+        .Include(p => p.Songs) // Include melodiile asociate
+        .FirstOrDefaultAsync(p => p.project_id == projectId);
+
+    if (project != null)
+    {
+        _context.Songs.RemoveRange(project.Songs);
+        _context.projects.Remove(project);
+
+        // Salveaza
+        await _context.SaveChangesAsync();
+    }
+
+    return RedirectToAction("Index","HomeController");
+}
 
         // GET: Projects/Edit/5
         public async Task<IActionResult> Edit(int? id)
