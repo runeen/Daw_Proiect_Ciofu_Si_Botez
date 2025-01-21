@@ -292,10 +292,9 @@ namespace cbapp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("song_id"));
 
                     b.Property<string>("length")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("project_id")
+                    b.Property<int?>("project_id")
                         .HasColumnType("int");
 
                     b.Property<string>("title")
@@ -395,8 +394,7 @@ namespace cbapp.Migrations
                     b.HasOne("cbapp.Models.Project", "Project")
                         .WithMany("Songs")
                         .HasForeignKey("project_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Project");
                 });

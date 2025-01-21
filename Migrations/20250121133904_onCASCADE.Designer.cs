@@ -12,8 +12,8 @@ using cbapp.Data;
 namespace cbapp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250121021956_O")]
-    partial class O
+    [Migration("20250121133904_onCASCADE")]
+    partial class onCASCADE
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -295,10 +295,9 @@ namespace cbapp.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("song_id"));
 
                     b.Property<string>("length")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("project_id")
+                    b.Property<int?>("project_id")
                         .HasColumnType("int");
 
                     b.Property<string>("title")
@@ -398,8 +397,7 @@ namespace cbapp.Migrations
                     b.HasOne("cbapp.Models.Project", "Project")
                         .WithMany("Songs")
                         .HasForeignKey("project_id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Project");
                 });

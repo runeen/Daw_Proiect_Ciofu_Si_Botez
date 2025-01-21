@@ -9,18 +9,18 @@ namespace cbapp.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int song_id{get;set;}
 
-        [Required]
+        
         [MaxLength(65)]
         public string title{get;set;}
         
-        [Required]
-        public string length {get;set; }
+        
+        public string? length {get;set; }
 
           [ForeignKey("Project")]
-        public int project_id{get;set; }
+        public int? project_id{get;set; }
 
       
-        public Project Project { get; set; }
+        public Project? Project { get; set; }
 
 
         public int tracklist_number{get;set;}

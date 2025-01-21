@@ -2,43 +2,115 @@
 
 @{
     ViewData["Title"] = "Create";
+    var type = ViewContext.HttpContext.Request.Query["type"].ToString();
 }
-
-<h1>Create</h1>
-
-<h4>Songs</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger text-center">
+        @ViewBag.Error
+    </div>
+}
+@if (ViewBag.Success != null)
+{
+    <div class="alert alert-success text-center">
+        @ViewBag.Success
+    </div>
+}
+<hr class="mb-4" />
+<h4 class="d-flex justify-content-center" style="color:darkred">Adauga songs in cadrul proiectului @ViewBag.type. In cazul in Care gresesti,trebuie sa o iei de la capat (renunta)</h4>
+<hr class="mb-4" />
+<h4 class="d-flex justify-content-center" style="color:darkred">Adaugi song cu Tracklist number: @(ViewBag.trackNum+1)</h4>
+<div class="d-flex justify-content-center align-items-center">
+    <div class="col-md-4"> <!-- Dimensiunea formularului -->
         <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
+            
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- Title -->
+            <div class="form-group mb-3">
                 <label asp-for="title" class="control-label"></label>
                 <input asp-for="title" class="form-control" />
                 <span asp-validation-for="title" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="length" class="control-label"></label>
-                <input asp-for="length" class="form-control" />
-                <span asp-validation-for="length" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="project_id" class="control-label"></label>
-                <select asp-for="project_id" class ="form-control" asp-items="ViewBag.project_id"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="tracklist_number" class="control-label"></label>
-                <input asp-for="tracklist_number" class="form-control" />
-                <span asp-validation-for="tracklist_number" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+
+            <!-- Length -->
+            <h4 style="color:darkred">Length:</h4>
+            <div class="form-group mb-3">
+    <label for="minutes" class="control-label">Minutes</label>
+    <input type="number" id="minutes" name="minutes" class="form-control" min="0" max="40" reuired />
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
+<div class="form-group mb-3">
+    <label for="seconds" class="control-label">Seconds</label>
+    <input type="number" id="seconds" name="seconds" class="form-control" min="0" max="59" required />
 </div>
+
+            <!-- Tracklist Number -->
+            
+
+            <!-- Submit button -->
+            <div class="d-grid mb-3">
+                <input id="adauga" type="submit" value="adauga" class="btn btn-primary" />
+            </div>
+            
+        </form>
+         <form asp-action="UploadArtwork" method="post" enctype="multipart/form-data">
+            <div class="form-group mb-3">
+                <label for="artwork">Upload Artwork:</label>
+                <input type="file" name="artwork" id="artwork" class="form-control" accept="image/*"/>
+            </div>
+            <div class="d-grid mb-3">
+                <input id="finalizeButton" type="submit" value="Finalizeaza si adauga Artwork" class="btn btn-success" onclick="preventDeletion = true;"/>
+            </div>
+        </form>
+        <div class="d-flex justify-content-center">
+    
+<a asp-controller="Projects" asp-action="Create" class="btn btn-secondary me-3">Renunta</a>
+<script>
+   
+    let preventDeletion = localStorage.getItem("preventDeletion") === "true";
+ 
+   
+     document.getElementById("adauga")?.addEventListener("click", () => {
+        preventDeletion = true; 
+        
+    });
+
+    document.getElementById("finalizeButton")?.addEventListener("click", () => {
+        preventDeletion = true; 
+        localStorage.setItem("preventDeletion", "true"); 
+    });
+
+    window.addEventListener("load", () => {
+        if (preventDeletion) {
+            preventDeletion=true;
+            localStorage.removeItem("preventDeletion");
+        }
+    });
+    window.addEventListener("beforeunload", function () {
+        if (!preventDeletion) {
+
+            navigator.sendBeacon("/Projects/DeleteOnExit", new Blob([JSON.stringify({
+                projectId: '@Context.Session.GetString("p_id")'
+            })], { type: 'application/json' }));
+        }
+    });
+
+    
+    
+</script>
+
+</div>
+
+    </div>
+    
+</div>
+
+
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 

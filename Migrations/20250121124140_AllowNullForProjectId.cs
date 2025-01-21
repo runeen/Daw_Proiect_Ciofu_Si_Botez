@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace cbapp.Migrations
 {
     /// <inheritdoc />
-    public partial class O : Migration
+    public partial class AllowNullForProjectId : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -206,8 +206,8 @@ namespace cbapp.Migrations
                     song_id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     title = table.Column<string>(type: "nvarchar(65)", maxLength: 65, nullable: false),
-                    length = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    project_id = table.Column<int>(type: "int", nullable: false),
+                    length = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    project_id = table.Column<int>(type: "int", nullable: true),
                     tracklist_number = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -217,8 +217,7 @@ namespace cbapp.Migrations
                         name: "FK_Songs_projects_project_id",
                         column: x => x.project_id,
                         principalTable: "projects",
-                        principalColumn: "project_id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "project_id");
                 });
 
             migrationBuilder.CreateIndex(

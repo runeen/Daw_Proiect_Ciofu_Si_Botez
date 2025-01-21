@@ -28,7 +28,13 @@ public class ApplicationDbContext : IdentityDbContext
         .WithMany(p => p.ratings)
         .HasForeignKey(pr => pr.projectId)
         .OnDelete(DeleteBehavior.Cascade);
-
+        
+        builder.Entity<Songs>()
+                .HasOne(s => s.Project)
+                .WithMany(p => p.Songs)
+                .HasForeignKey(s => s.project_id)
+                .OnDelete(DeleteBehavior.Cascade); // Activează ștergerea în cascadă
+        
     // Relația cu CustomUsers
     builder.Entity<ProjectRatings>()
         .HasOne(pr => pr.User)
