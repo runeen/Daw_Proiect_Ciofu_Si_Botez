@@ -21,7 +21,7 @@ public class Project
     [Display(Name = "Release Date")]
     public DateTime release_date { get; set; }
 
-    public ICollection<ProjectRatings> ratings { get; set; } = new HashSet<ProjectRatings>();
+    public ICollection<ProjectRatings> ProjectRatings { get; set; } = new HashSet<ProjectRatings>();
     public ICollection<Songs> Songs { get; set; } = new HashSet<Songs>();
 
     [Required]

@@ -1,49 +1,59 @@
 ﻿@model IEnumerable<cbapp.Models.Project>
 @{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Home Page";
 }
 
 
 
+
 <div class="text-center">
-    <h1 class="h1_personalizat" style="margin-top: 22px;">Lista Albume</h1>
+	<h1 class="h1_personalizat" style="margin-top: 22px;">Lista Albume</h1>
 
 </div>
 
 <form action="Home/Search">
-    <input type="text" name="searchTerm"/>
-    <input type="submit"/>
+	<input type="text" name="searchTerm" />
+	<input type="submit" />
 </form>
 
-<div hidden> 
-    debug:
-    <a asp-controller="Projects">Projects</a>
-    <a asp-controller="Songs">Songs</a>
-    <a asp-controller="ProjectRatings">Project Ratings</a>
+<div hidden>
+	debug:
+	<a asp-controller="Projects">Projects</a>
+	<a asp-controller="Songs">Songs</a>
+	<a asp-controller="ProjectRatings">Project Ratings</a>
 </div>
 
+@{
+	string link = "";
+}
 
 <a asp-action="rating_dashboard" style="font-size: 30px; font-style: italic">Vezi rating-urile tale</a>
 
-<div class= "grid-proiecte">
-        @foreach (var item in Model)
-        {
-            <div class="proiect-div">
+<div class="grid-proiecte">
+	@foreach (var item in Model)
+	{
+		<div class="proiect-div">
 			<a>
-                <h1 class="titlu-proiect-grid">
-				@Html.DisplayFor(modelItem => item.type): @Html.DisplayFor(modelItem => item.release_title)
-                </h1>
-                <p class= "details-proiect-grid">
-				@Html.DisplayFor(modelItem => item.artist) - @Convert.ToDateTime(item.release_date).ToString("dd/MM/yyyy")
-                </p>
-                <form action="ProjectRatings/CreateFromFront">
-                    <input type="hidden" name="project_id" value="@item.project_id" />
-                    <input type="submit"/>
-                </form>
-            </a>
-            </div>
-        }
+				<h1 class="titlu-proiect-grid">
+					@Html.DisplayFor(modelItem => item.type): @Html.DisplayFor(modelItem => item.release_title)
+				</h1>
+				<p class="details-proiect-grid">
+					@Html.DisplayFor(modelItem => item.artist) - @Convert.ToDateTime(item.release_date).ToString("dd/MM/yyyy")
+				</p>
+				<form action="ProjectRatings/CreateFromFront">
+					<input type="hidden" name="project_id" value="@item.project_id" />
+					<input type="submit" class="btn btn-primary"/>
+				</form>
+
+				<img src="~/projectPhotos/@item.project_id
+							.jpg"
+					 alt="shau">
+			</a>
+		</div>
+	}
 </div>
+
+
 
 
 

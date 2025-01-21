@@ -4,6 +4,7 @@ using cbapp.Models;
 using Microsoft.EntityFrameworkCore;
 using cbapp.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace cbapp.Controllers;
 
@@ -53,6 +54,7 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
+    [Authorize]
     public async Task<IActionResult> rating_dashboard()
     {
         var applicationDbContext = _context.ProjectRatings;

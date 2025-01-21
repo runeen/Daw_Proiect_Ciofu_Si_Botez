@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration.UserSecrets;
 using Microsoft.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Build.Evaluation;
+using Microsoft.AspNetCore.Authorization;
 
 namespace cbapp.Controllers
 {
@@ -66,6 +67,7 @@ namespace cbapp.Controllers
         }
 
         [HttpGet()]
+        [Authorize]
         public async Task<IActionResult> CreateFromFront(int? project_id)
         {
             String userId = "";

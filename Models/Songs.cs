@@ -1,6 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
@@ -10,23 +7,28 @@ namespace cbapp.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int song_id { get; set; 
+        public int song_id { get; set; }
 
-        
+
         [MaxLength(65)]
         public string title { get; set; }
 
-        [Required]
-        public string length { get; set; }
+
+        public string? length { get; set; }
 
         [ForeignKey("Project")]
-        public int project_id { get; set; }
+        public int? project_id { get; set; }
 
 
-        public Project Project { get; set; }
+        public Project? Project { get; set; }
 
 
         public int tracklist_number { get; set; }
+
+
+
+
+
 
 
     }
