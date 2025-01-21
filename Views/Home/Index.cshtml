@@ -6,7 +6,7 @@
 
 
 <div class="text-center">
-    <h1 class="h1_personalizat" style="margin-top: 22px;">Ultimele albume si singles care au primit note</h1>
+    <h1 class="h1_personalizat" style="margin-top: 22px;">Lista Albume</h1>
 
 </div>
 
@@ -15,27 +15,35 @@
     <input type="submit"/>
 </form>
 
-<div> 
+<div hidden> 
     debug:
     <a asp-controller="Projects">Projects</a>
     <a asp-controller="Songs">Songs</a>
     <a asp-controller="ProjectRatings">Project Ratings</a>
 </div>
 
+
+<a asp-action="rating_dashboard" style="font-size: 30px; font-style: italic">Vezi rating-urile tale</a>
+
 <div class= "grid-proiecte">
         @foreach (var item in Model)
         {
             <div class="proiect-div">
-			<a asp-action="Edit" asp-controller="Projects" asp-route-id="@item.project_id">
+			<a>
                 <h1 class="titlu-proiect-grid">
 				@Html.DisplayFor(modelItem => item.type): @Html.DisplayFor(modelItem => item.release_title)
                 </h1>
                 <p class= "details-proiect-grid">
 				@Html.DisplayFor(modelItem => item.artist) - @Convert.ToDateTime(item.release_date).ToString("dd/MM/yyyy")
                 </p>
+                <form action="ProjectRatings/CreateFromFront">
+                    <input type="hidden" name="project_id" value="@item.project_id" />
+                    <input type="submit"/>
+                </form>
             </a>
             </div>
         }
 </div>
+
 
 

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<cbapp.Models.ProjectRatings>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Ratinguri:</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.rating_date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.score)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Project.release_title)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.rating_date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.score)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Project.release_title)
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", "ProjectRatings", new { projectId = item.projectId, UserId = item.UserId })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

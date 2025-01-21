@@ -6,6 +6,8 @@ namespace cbapp.Models
     {
         public ICollection<ProjectRatings> ProjectRatings { get; set; }
 
+        
+
         public CustomUsers()
         {
             ProjectRatings = new HashSet<ProjectRatings>();
